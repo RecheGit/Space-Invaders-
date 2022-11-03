@@ -3,7 +3,7 @@ pygame.init()
 BLACK = (0,0,0)
 WHITE= (255,255,255)
 RED = (255,0,0)
-size = (800, 500)
+size = (1000, 600)#800 500
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock() #Tener control de los frames
 
@@ -17,6 +17,8 @@ y_speed = 0
 background = pygame.image.load("backgala.webp").convert()
 nave = pygame.image.load("nave.png").convert()
 nave.set_colorkey([0,0,0])#Quitar fondo negro de la imagen
+meteorito = pygame.image.load("meteorito.png").convert()
+meteorito.set_colorkey([0,0,0])#Quitar fondo negro de la imagen
 
 def movimiento_teclado(event,x_speed,y_speed):
 
@@ -44,17 +46,20 @@ def movimiento_teclado(event,x_speed,y_speed):
 
 listacord = [] #para guardar unas coordenadas fijas y no nos salgan constantemente
 i=0
-while i<= 20:
+
+while i<= 15:
     #Tenemos que incluir x e y porque sino solo nos salen los puntos en una recta
     obj_x = random.randint(0,800)
     obj_y = random.randint(0,500)
-    pygame.draw.circle(screen,RED, (obj_x,obj_y), 2)
+    pygame.draw.circle(screen,RED, (obj_x,obj_y), 5)
     listacord.append([obj_x,obj_y])
     i=i+1
+
+
         
 def caida_objetos():
     for coordenada in listacord:
-        pygame.draw.circle(screen,RED, coordenada, 2)
+        screen.blit(meteorito,coordenada)
         coordenada[1] += 1 #Aumentamos la Y para que parezca que baja
         if coordenada[1]>500:
             coordenada[1]=0
@@ -94,5 +99,5 @@ while not fin_juego:
 
     
     pygame.display.flip()
-    clock.tick(60) #Frames por segundo
+    clock.tick(70) #Frames por segundo
     
