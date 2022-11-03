@@ -14,6 +14,10 @@ coord_y = 10
 x_speed = 0
 y_speed = 0
 
+background = pygame.image.load("backgala.webp").convert()
+nave = pygame.image.load("nave.png").convert()
+nave.set_colorkey([0,0,0])#Quitar fondo negro de la imagen
+
 def movimiento_teclado(event,x_speed,y_speed):
 
     if event.type == pygame.KEYDOWN:
@@ -38,19 +42,19 @@ def movimiento_teclado(event,x_speed,y_speed):
 
     return [x_speed,y_speed]
 
-listacord = []
+listacord = [] #para guardar unas coordenadas fijas y no nos salgan constantemente
 i=0
 while i<= 20:
     #Tenemos que incluir x e y porque sino solo nos salen los puntos en una recta
     obj_x = random.randint(0,800)
     obj_y = random.randint(0,500)
-    pygame.draw.circle(screen,BLACK, (obj_x,obj_y), 2)
+    pygame.draw.circle(screen,RED, (obj_x,obj_y), 2)
     listacord.append([obj_x,obj_y])
     i=i+1
         
 def caida_objetos():
     for coordenada in listacord:
-        pygame.draw.circle(screen,BLACK, coordenada, 2)
+        pygame.draw.circle(screen,RED, coordenada, 2)
         coordenada[1] += 1 #Aumentamos la Y para que parezca que baja
         if coordenada[1]>500:
             coordenada[1]=0
@@ -70,20 +74,24 @@ while not fin_juego:
         y_speed=movimiento_teclado(evento,x_speed,y_speed)[1]
         #print(coord_x)
         print(coord_y)
-    screen.fill(WHITE)
+    #screen.fill(WHITE)
+    screen.blit(background, [0, 0])
     caida_objetos()
     coord_x += x_speed
     coord_y += y_speed
+    screen.blit(nave, [coord_x,coord_y])
+
     if coord_x > 702 :#limites del cubo con los bordes laterales
         coord_x=702
     elif coord_x <= 0:
         coord_x=0           
     if coord_y > 400 :#limites del cubo con los bordes laterales
         coord_y=400
-    elif coord_y <= -2:
-        coord_y=-2           
+    elif coord_y <= 0:
+        coord_y=0           
     
-    pygame.draw.rect(screen, RED, (coord_x, coord_y, 100, 100))
+    #pygame.draw.rect(screen, RED, (coord_x, coord_y, 50, 50))
+
     
     pygame.display.flip()
     clock.tick(60) #Frames por segundo
