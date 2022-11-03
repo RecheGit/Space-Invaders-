@@ -75,7 +75,7 @@ while not fin_juego:
         #print(coord_x)
         print(coord_y)
     #screen.fill(WHITE)
-    screen.blit(background, [0, 0])
+    screen.blit(background, [0, 0])#añadir imagen
     caida_objetos()
     coord_x += x_speed
     coord_y += y_speed
