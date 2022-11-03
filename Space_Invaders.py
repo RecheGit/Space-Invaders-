@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, random
 pygame.init()
 BLACK = (0,0,0)
 WHITE= (255,255,255)
@@ -14,7 +14,7 @@ coord_y = 10
 x_speed = 0
 y_speed = 0
 
-def izq_der_teclado(event,x_speed,y_speed):
+def movimiento_teclado(event,x_speed,y_speed):
 
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_LEFT:
@@ -38,19 +38,41 @@ def izq_der_teclado(event,x_speed,y_speed):
 
     return [x_speed,y_speed]
 
+listacord = []
+i=0
+while i<= 20:
+    obj_x = random.randint(0,800)
+    obj_y = random.randint(0,500)
+    pygame.draw.circle(screen,BLACK, (obj_x,obj_y), 2)
+    listacord.append([obj_x,obj_y])
+    i=i+1
+        
+def caida_objetos():
+    for coordenada in listacord:
+        pygame.draw.circle(screen,BLACK, coordenada, 2)
+        coordenada[1] += 1 #Aumentamos la Y para que parezca que baja
+        if coordenada[1]>500:
+            coordenada[1]=0
 
+
+
+        
+#Bucle principal
 
 
 while True:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             sys.exit()
-        x_speed=izq_der_teclado(evento,x_speed,y_speed)[0]
-        y_speed=izq_der_teclado(evento,x_speed,y_speed)[1]
+        x_speed=movimiento_teclado(evento,x_speed,y_speed)[0]
+        y_speed=movimiento_teclado(evento,x_speed,y_speed)[1]
+        print(coord_x)
     screen.fill(WHITE)
+    caida_objetos()
     coord_x += x_speed
-    coord_y += y_speed                
+    coord_y += y_speed           
     pygame.draw.rect(screen, RED, (coord_x, coord_y, 100, 100))
+    
     pygame.display.flip()
     clock.tick(60) #Frames por segundo
     
