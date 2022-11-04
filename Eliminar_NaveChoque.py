@@ -1,5 +1,6 @@
 import pygame, random, sys
 
+print("BIENVENIDO, DISPONES DE 3 VIDAS")
 BLACK = (0,0,0)
 WHITE= (255,255,255)
 RED = (255,0,0)
@@ -102,12 +103,12 @@ while not fin_juego:
     numcolisiones=pygame.sprite.spritecollide(nave, ListaMeteoritos, True)
     for colisiones in numcolisiones:
         VIDA -=1 
-        print(VIDA)
+        print("LE QUEDAN " + str(VIDA)+" VIDAS")
         if VIDA == 0:
             print("GAME OVER")
             fin_juego=True
     TodosSprite.draw(screen)
-    
+
     ###DELIMITAMOS BORDES###
     if coord_x > 904 :#limites del cubo con los bordes laterales
         coord_x=904
