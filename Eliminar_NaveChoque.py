@@ -1,4 +1,4 @@
-import pygame, random, sys
+import pygame, random, sys, time
 
 print("BIENVENIDO, DISPONES DE 3 VIDAS")
 BLACK = (0,0,0)
@@ -12,6 +12,7 @@ class Meteorito(pygame.sprite.Sprite):
 		self.image = pygame.image.load("meteorito.png").convert()
 		self.image.set_colorkey(BLACK)
 		self.rect = self.image.get_rect()#Guardar posición
+
 	def update(self):
 		self.rect.y += 1
 		if self.rect.y > 600:
@@ -30,7 +31,7 @@ class Nave(pygame.sprite.Sprite):
 
 
 pygame.init()
-
+#Aqui puedo poner en una ventana con timesleep el inico o asi
 size = (1000, 600)
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock() #Tener control de los frames
@@ -73,14 +74,19 @@ TodosSprite = pygame.sprite.Group()
 
 #Creamos todos los meteoritos
 
-for i in range(20):
+##posible
+def crearMeteorito():
+    for i in range(20):
+        
+        meteorito = Meteorito()
+        meteorito.rect.x = random.randrange(1000)
+        meteorito.rect.y = random.randrange(600)
 
-    meteorito = Meteorito()
-    meteorito.rect.x = random.randrange(1000)
-    meteorito.rect.y = random.randrange(600)
+        ListaMeteoritos.add(meteorito)
+        TodosSprite.add(meteorito)
 
-    ListaMeteoritos.add(meteorito)
-    TodosSprite.add(meteorito)
+def controltime():
+    time.sleep(5)
 
 nave = Nave()
 TodosSprite.add(nave)
