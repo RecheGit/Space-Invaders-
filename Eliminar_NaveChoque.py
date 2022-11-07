@@ -62,8 +62,8 @@ def movimiento_teclado(event,x_speed,y_speed):
 
     return [x_speed,y_speed]
 #Coordenadas de la nave al inicio
-coord_x = 10
-coord_y = 10
+coord_x = 500
+coord_y = 300
 #Velocidad teclado
 x_speed = 0
 y_speed = 0
