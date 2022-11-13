@@ -83,23 +83,39 @@ TodosSprite = pygame.sprite.Group()
 
 #Creamos todos los meteoritos
 
-def crear_meteoritos():
-    time.sleep(0.5)
-    for i in range(5):
-        
-        meteorito = Meteorito()
+def crear_meteoritos(aviso):
+    if aviso == True:
+        meteorito=Meteorito()
         meteorito.rect.x = random.randrange(1000)
         meteorito.rect.y = random.randrange(100)
         ListaMeteoritos.add(meteorito)
         TodosSprite.add(meteorito)
+    else:
+        time.sleep(0.5)
+        for i in range(5):
+            
+            meteorito = Meteorito()
+            meteorito.rect.x = random.randrange(1000)
+            meteorito.rect.y = random.randrange(100)
+            ListaMeteoritos.add(meteorito)
+            TodosSprite.add(meteorito)
     
 
 nave = Nave()
 TodosSprite.add(nave)
 
-crear_meteoritos()
 Choque=False
+tiempoSinChoque=0
+avisoTiempoSinChoque=False
+crear_meteoritos(avisoTiempoSinChoque)
+
 while not fin_juego:
+    if tiempoSinChoque == 1000:#subir de dificultad periodicamente
+        avisoTiempoSinChoque=True
+        crear_meteoritos(avisoTiempoSinChoque)
+        tiempoSinChoque=0
+        avisoTiempoSinChoque=False
+
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             sys.exit()
@@ -120,7 +136,7 @@ while not fin_juego:
         coord_x = 500
         coord_y = 500
         time.sleep(0.10)
-        crear_meteoritos()
+        #crear_meteoritos(avisoTiempoSinChoque)
         VIDA -=1 
         print("LE QUEDAN " + str(VIDA)+" VIDAS")    
         if VIDA == 0:
@@ -139,7 +155,9 @@ while not fin_juego:
     elif coord_y <= 0:
         coord_y=0        
     ###DELIMITAMOS BORDES###   
-
-
     pygame.display.flip()
+    tiempoSinChoque+=1
+    #print(tiempoSinChoque)
+    
+
     clock.tick(170) #Frames por segundo  
