@@ -1,4 +1,8 @@
 import pygame, random, sys, time
+from pygame.locals import *
+from datetime import datetime
+
+
 
 print("BIENVENIDO, DISPONES DE 3 VIDAS")
 BLACK = (0,0,0)
@@ -44,6 +48,18 @@ size = (1000, 600)
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock() #Tener control de los frames
 background = pygame.image.load("backgala.webp").convert()
+background_menuInicio = pygame.image.load("galaxy.webp").convert()
+play_img= pygame.image.load("play.webp").convert_alpha()
+width = play_img.get_rect().width
+print(width)
+height = play_img.get_rect().height
+print(height)
+play_img = pygame.transform.scale(play_img, (width-300, height-80))
+
+
+#bo
+#screen.blit(play_img,(300,500) )
+
 fin_juego=False
 VIDA=3
 
@@ -88,24 +104,8 @@ estado_menu = "menuInicial"
 
 
 
-fuente=pygame.font.SysFont("arialblack",40)
+fuente=pygame.font.SysFont("arialblack",100)
 
-#Pantalla Menu y Fin
-def texto_menu(text, font, text_col, x, y ):
-
-    img=fuente.render(text,True, text_col)    
-    screen.blit(img,(1000,600))
-
-
-
-    if screen == "jugando":
-        pass
-    elif screen == "pausa":
-        pass
-    elif screen == "menuInicial":
-        pass
-    elif screen == "menuFinal":
-        pass
 
 
 def movimiento_teclado(event,x_speed,y_speed):
@@ -133,6 +133,9 @@ def movimiento_teclado(event,x_speed,y_speed):
 
     return [x_speed,y_speed]
 
+def click_en_play(coord):
+    rdo= True
+    return rdo
 
 
 
@@ -141,10 +144,24 @@ tiempoSinChoque=0
 avisoTiempoSinChoque=False
 crear_meteoritos(avisoTiempoSinChoque)
 
-game_mode= "jugando"
-
+game_mode= "menuInicio"
+click=False
 while not fin_juego:
-    if game_mode == "partida_pausada": 
+
+    if game_mode == "menuInicio":
+        while click==False:
+            screen.blit(background_menuInicio, [0, 0])
+            screen.blit(fuente.render("CHOQUE ESPACIAL", True,WHITE ), (150, 50))
+            screen.blit(play_img,(375,200) )
+            pygame.display.flip()
+            mouse_pos = pygame.mouse.get_pos()
+            x = mouse_pos[0]
+            y = mouse_pos[1]
+            click=click_en_play((x,y))
+        game_mode="jugando"
+        pygame.display.flip()
+
+    elif game_mode == "partida_pausada": 
        # fuente.render(text,True, text_col)  
         reactivar = False
         while reactivar == False:
