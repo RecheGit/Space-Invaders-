@@ -1,4 +1,8 @@
-import pygame, random, sys, time
+import pygame, random, sys, time, button
+from pygame.locals import *
+from datetime import datetime
+
+
 
 print("BIENVENIDO, DISPONES DE 3 VIDAS")
 BLACK = (0,0,0)
@@ -11,7 +15,8 @@ class Meteorito(pygame.sprite.Sprite):
 
 	def __init__(self):
 		super().__init__()
-		self.image = pygame.image.load("meteorito.png").convert()
+		self.image = pygame.image.load("imagenes/meteorito.png").convert()
+        #self.image.transform.scale(play_img, (width-300, height-80))
 		self.image.set_colorkey(BLACK)
 		self.rect = self.image.get_rect()#Guardar posición
         
@@ -31,7 +36,7 @@ class Meteorito(pygame.sprite.Sprite):
 class Nave(pygame.sprite.Sprite):
 	def __init__(self):
 		super().__init__()
-		self.image = pygame.image.load("nave.png").convert()
+		self.image = pygame.image.load("imagenes/nave.png").convert()
 		self.image.set_colorkey(BLACK)
 		self.rect = self.image.get_rect()
 
@@ -43,7 +48,19 @@ pygame.init()
 size = (1000, 600)
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock() #Tener control de los frames
-background = pygame.image.load("backgala.webp").convert()
+background = pygame.image.load("imagenes/backgala.webp").convert()
+background_menuInicio = pygame.image.load("imagenes/galaxy.webp").convert()
+play_img= pygame.image.load("imagenes/play.webp").convert_alpha()
+width = play_img.get_rect().width
+print(width)
+height = play_img.get_rect().height
+print(height)
+play_img = pygame.transform.scale(play_img, (width-300, height-80))
+
+
+#bo
+#screen.blit(play_img,(300,500) )
+
 fin_juego=False
 VIDA=3
 
@@ -68,6 +85,7 @@ def crear_meteoritos(aviso):
         ListaMeteoritos.add(meteorito)
         TodosSprite.add(meteorito)
     else:
+       # ListaMeteoritos= []
         time.sleep(0.5)
         for i in range(5):
             
@@ -88,24 +106,8 @@ estado_menu = "menuInicial"
 
 
 
-fuente=pygame.font.SysFont("arialblack",40)
+fuente=pygame.font.SysFont("arialblack",100)
 
-#Pantalla Menu y Fin
-def texto_menu(text, font, text_col, x, y ):
-
-    img=fuente.render(text,True, text_col)    
-    screen.blit(img,(1000,600))
-
-
-
-    if screen == "jugando":
-        pass
-    elif screen == "pausa":
-        pass
-    elif screen == "menuInicial":
-        pass
-    elif screen == "menuFinal":
-        pass
 
 
 def movimiento_teclado(event,x_speed,y_speed):
@@ -133,6 +135,9 @@ def movimiento_teclado(event,x_speed,y_speed):
 
     return [x_speed,y_speed]
 
+def click_en_play(coord):
+    rdo= True
+    return rdo
 
 
 
@@ -141,9 +146,32 @@ tiempoSinChoque=0
 avisoTiempoSinChoque=False
 crear_meteoritos(avisoTiempoSinChoque)
 
-game_mode= "jugando"
 
+#load button images
+start_img = pygame.image.load('imagenes/play.webp').convert_alpha()
+#exit_img = pygame.image.load('exit_btn.png').convert_alpha()
+
+#create button instances
+start_button = button.Button(100, 200, start_img, 0.8)
+#exit_button = button.Button(450, 200, exit_img, 0.8)
+
+game_mode= "menuInicio"
+click=False
 while not fin_juego:
+
+    while game_mode == "menuInicio":
+        #print("HOLAA")
+        screen.blit(background_menuInicio, [0, 0])
+        screen.blit(fuente.render("CHOQUE ESPACIAL", True,WHITE ), (150, 50))
+        if start_button.draw(screen):
+            print("START")
+            game_mode="jugando"
+        for evento in pygame.event.get():
+            if evento.type== pygame.QUIT:
+                fin_juego=True
+        pygame.display.update()
+
+
     if game_mode == "partida_pausada": 
        # fuente.render(text,True, text_col)  
         reactivar = False
@@ -156,7 +184,7 @@ while not fin_juego:
                         game_mode = "jugando"
                         reactivar=True
                         pygame.display.flip()
-                        print("frantxu30")
+                        #print("frantxu30")
 
     elif game_mode == "jugando":
         if tiempoSinChoque == 1000:#subir de dificultad periodicamente
@@ -217,3 +245,18 @@ while not fin_juego:
         
 
         clock.tick(170) #Frames por segundo  
+
+    pygame.display.update()
+
+
+
+
+#MEJORAS NECESARIAS
+
+#INCREMENTAR EL NIVEL EN FUNCION DEL TIEMPO
+#MINIMIZAR EL TAMAÑO DE LA NAVE
+#NUEVA FUNCIONALIDAD MENU FINAL
+
+ #AÑADIR PARA PONER USUARIO
+ #RANKING --BBDD?
+ #MENUS

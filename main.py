@@ -1,4 +1,4 @@
-import pygame, random, sys, time
+import pygame, random, sys, time, button
 from pygame.locals import *
 from datetime import datetime
 
@@ -16,6 +16,7 @@ class Meteorito(pygame.sprite.Sprite):
 	def __init__(self):
 		super().__init__()
 		self.image = pygame.image.load("imagenes/meteorito.png").convert()
+        #self.image.transform.scale(play_img, (width-300, height-80))
 		self.image.set_colorkey(BLACK)
 		self.rect = self.image.get_rect()#Guardar posición
         
@@ -84,6 +85,7 @@ def crear_meteoritos(aviso):
         ListaMeteoritos.add(meteorito)
         TodosSprite.add(meteorito)
     else:
+       # ListaMeteoritos= []
         time.sleep(0.5)
         for i in range(5):
             
@@ -144,24 +146,33 @@ tiempoSinChoque=0
 avisoTiempoSinChoque=False
 crear_meteoritos(avisoTiempoSinChoque)
 
+
+#load button images
+start_img = pygame.image.load('imagenes/play.webp').convert_alpha()
+#exit_img = pygame.image.load('exit_btn.png').convert_alpha()
+
+#create button instances
+start_button = button.Button(100, 200, start_img, 0.8)
+#exit_button = button.Button(450, 200, exit_img, 0.8)
+
 game_mode= "menuInicio"
 click=False
 while not fin_juego:
 
-    if game_mode == "menuInicio":
-        while click==False:
-            screen.blit(background_menuInicio, [0, 0])
-            screen.blit(fuente.render("CHOQUE ESPACIAL", True,WHITE ), (150, 50))
-            screen.blit(play_img,(375,200) )
-            pygame.display.flip()
-            mouse_pos = pygame.mouse.get_pos()
-            x = mouse_pos[0]
-            y = mouse_pos[1]
-            click=click_en_play((x,y))
-        game_mode="jugando"
-        pygame.display.flip()
+    while game_mode == "menuInicio":
+        #print("HOLAA")
+        screen.blit(background_menuInicio, [0, 0])
+        screen.blit(fuente.render("CHOQUE ESPACIAL", True,WHITE ), (150, 50))
+        if start_button.draw(screen):
+            print("START")
+            game_mode="jugando"
+        for evento in pygame.event.get():
+            if evento.type== pygame.QUIT:
+                fin_juego=True
+        pygame.display.update()
 
-    elif game_mode == "partida_pausada": 
+
+    if game_mode == "partida_pausada": 
        # fuente.render(text,True, text_col)  
         reactivar = False
         while reactivar == False:
@@ -173,7 +184,7 @@ while not fin_juego:
                         game_mode = "jugando"
                         reactivar=True
                         pygame.display.flip()
-                        print("frantxu30")
+                        #print("frantxu30")
 
     elif game_mode == "jugando":
         if tiempoSinChoque == 1000:#subir de dificultad periodicamente
@@ -234,3 +245,18 @@ while not fin_juego:
         
 
         clock.tick(170) #Frames por segundo  
+
+    pygame.display.update()
+
+
+
+
+#MEJORAS NECESARIAS
+
+#INCREMENTAR EL NIVEL EN FUNCION DEL TIEMPO
+#MINIMIZAR EL TAMAÑO DE LA NAVE
+#NUEVA FUNCIONALIDAD MENU FINAL
+
+ #AÑADIR PARA PONER USUARIO
+ #RANKING --BBDD?
+ #MENUS
