@@ -15,7 +15,7 @@ class Meteorito(pygame.sprite.Sprite):
 
 	def __init__(self):
 		super().__init__()
-		self.image = pygame.image.load("meteorito.png").convert()
+		self.image = pygame.image.load("imagenes/meteorito.png").convert()
 		self.image.set_colorkey(BLACK)
 		self.rect = self.image.get_rect()#Guardar posición
         
@@ -35,7 +35,7 @@ class Meteorito(pygame.sprite.Sprite):
 class Nave(pygame.sprite.Sprite):
 	def __init__(self):
 		super().__init__()
-		self.image = pygame.image.load("nave.png").convert()
+		self.image = pygame.image.load("imagenes/nave.png").convert()
 		self.image.set_colorkey(BLACK)
 		self.rect = self.image.get_rect()
 
@@ -47,9 +47,9 @@ pygame.init()
 size = (1000, 600)
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock() #Tener control de los frames
-background = pygame.image.load("backgala.webp").convert()
-background_menuInicio = pygame.image.load("galaxy.webp").convert()
-play_img= pygame.image.load("play.webp").convert_alpha()
+background = pygame.image.load("imagenes/backgala.webp").convert()
+background_menuInicio = pygame.image.load("imagenes/galaxy.webp").convert()
+play_img= pygame.image.load("imagenes/play.webp").convert_alpha()
 width = play_img.get_rect().width
 print(width)
 height = play_img.get_rect().height
