@@ -1,0 +1,11 @@
+
+                                                        CHOQUE GALÁCTICO
+
+Controles:
+
+Desplazamiento Derecha: →
+Desplazamiento Izquierda: ←
+Desplazamiento Frontal: ↑
+Desplazamiento Trasero: ↓
+
+Pausar el juego: p
