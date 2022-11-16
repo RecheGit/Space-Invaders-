@@ -38,6 +38,8 @@ class Nave(pygame.sprite.Sprite):
 		self.image = pygame.image.load("imagenes/playerN.png").convert()
 		self.image.set_colorkey(BLACK)
 		self.rect = self.image.get_rect()
+
+
  
 pygame.init()
 
@@ -158,9 +160,16 @@ return_button = button.Button(930, 526, return_img, 0.05)
 exit_button = button.Button(475, 526, exit_img, 0.05)
 tick_button = button.Button(600, 526, tick_img, 0.05)
 
+corazones_añadidos=False
+corazon1 = pygame.image.load("imagenes/corazon.webp").convert()
+corazon2 = pygame.image.load("imagenes/corazon.webp").convert()
+corazon3 = pygame.image.load("imagenes/corazon.webp").convert()
+
 
 game_mode= "menuInicio"
 click=False
+
+puntuacion=0
 while not fin_juego:
     if game_mode== "controles":
         screen.blit(background_menuInicio, [0, 0])
@@ -174,6 +183,7 @@ while not fin_juego:
 
         if return_button.draw(screen):
             game_mode="menuInicio"
+
         for evento in pygame.event.get():
             if evento.type== pygame.QUIT:
                 sys.exit()
@@ -182,6 +192,7 @@ while not fin_juego:
     
 
     if game_mode == "menuInicio":
+
         screen.blit(background_menuInicio, [0, 0])
         screen.blit(fuente.render("CHOQUE ESPACIAL", True,WHITE ), (150, 50))
         if start_button.draw(screen):
@@ -210,7 +221,14 @@ while not fin_juego:
                         pygame.display.flip()
                         
     elif game_mode == "jugando":
-       
+        '''
+        if corazones_añadidos==False:
+            screen.blit(corazon1, (160, 250))
+            screen.blit(corazon2, (190, 250))
+            screen.blit(corazon3, (210, 250))
+            corazones_añadidos=True
+            pygame.display.flip()
+        '''
         
         if tiempoSinChoque == 1000:#subir de dificultad periodicamente
             avisoTiempoSinChoque=True
@@ -224,6 +242,7 @@ while not fin_juego:
             elif evento.type == pygame.KEYDOWN:
 
                 if evento.key == pygame.K_p:
+                    
                     game_mode = "partida_pausada"
 
             x_speed=movimiento_teclado(evento,x_speed,y_speed)[0]
@@ -248,6 +267,8 @@ while not fin_juego:
             VIDA -=1 
             print("LE QUEDAN " + str(VIDA)+" VIDAS")    
             if VIDA == 0:
+                #puntuacion= tiempoIni-tiempoFin
+                #print(tiempoFin)
                 game_mode="menu_fin"
                 #fin_juego=True
         Choque=False
