@@ -36,9 +36,12 @@ class Nave(pygame.sprite.Sprite):
 	def __init__(self):
 		super().__init__()
 		self.image = pygame.image.load("imagenes/playerN.png").convert()
+		#self.imageC = pygame.image.load("imagenes/corazon.png").convert()
+		#self.imageC.set_colorkey(BLACK)
+		#self.rectC = self.image.get_rect()        
 		self.image.set_colorkey(BLACK)
 		self.rect = self.image.get_rect()
-
+    
 
  
 pygame.init()
@@ -58,7 +61,7 @@ play_img = pygame.transform.scale(play_img, (width-500, height-100))
 #screen.blit(play_img,(300,500) )
 
 fin_juego=False
-VIDA=1
+VIDA=3
 
 
 #Coordenadas de la nave al inicio
@@ -160,16 +163,28 @@ return_button = button.Button(930, 526, return_img, 0.05)
 exit_button = button.Button(475, 526, exit_img, 0.05)
 tick_button = button.Button(600, 526, tick_img, 0.05)
 
-corazones_añadidos=False
-corazon1 = pygame.image.load("imagenes/corazon.webp").convert()
-corazon2 = pygame.image.load("imagenes/corazon.webp").convert()
-corazon3 = pygame.image.load("imagenes/corazon.webp").convert()
 
+##CORAZONES
+
+
+corazones_añadidos=False
 
 game_mode= "menuInicio"
 click=False
-
 puntuacion=0
+
+
+#### COSAS NECESARIAS TEXTBOX
+font = pygame.font.Font(None, 32)
+clock = pygame.time.Clock()
+input_box = pygame.Rect(425, 150, 140, 32)
+color_inactive = pygame.Color(BLACK)
+color_active = pygame.Color('dodgerblue2')
+color = color_inactive
+active = False
+text = ''
+done = False
+
 while not fin_juego:
     if game_mode== "controles":
         screen.blit(background_menuInicio, [0, 0])
@@ -189,12 +204,13 @@ while not fin_juego:
                 sys.exit()
         pygame.display.update()
 
-    
 
     if game_mode == "menuInicio":
 
+
         screen.blit(background_menuInicio, [0, 0])
         screen.blit(fuente.render("CHOQUE ESPACIAL", True,WHITE ), (150, 50))
+        screen.blit(fuente2.render("Nombre: ", True,BLACK ), (275, 150))
         if start_button.draw(screen):
             game_mode="jugando"
         if ajustes_button.draw(screen):
@@ -202,6 +218,36 @@ while not fin_juego:
         for evento in pygame.event.get():
             if evento.type== pygame.QUIT:
                 sys.exit()
+            if evento.type == pygame.MOUSEBUTTONDOWN:
+                # If the user clicked on the input_box rect.
+                if input_box.collidepoint(evento.pos):
+                    # Toggle the active variable.
+                    active = not active
+                else:
+                    active = False
+                # Change the current color of the input box.
+                color = color_active if active else color_inactive
+            if evento.type == pygame.KEYDOWN:
+                if active:
+                    if evento.key == pygame.K_RETURN:
+                        #print(text)
+                        text = ''
+                        pass
+                    elif evento.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                        pass
+                    else:
+                        text += evento.unicode
+        # Render the current text.
+        txt_surface = font.render(text, True, color)
+        # Resize the box if the text is too long.
+        width = max(200, txt_surface.get_width()+10)
+        input_box.w = width
+        # Blit the text.
+        screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
+        # Blit the input_box rect.
+        pygame.draw.rect(screen, color, input_box, 2)
+
 
         pygame.display.update()
 
@@ -221,15 +267,8 @@ while not fin_juego:
                         pygame.display.flip()
                         
     elif game_mode == "jugando":
-        '''
-        if corazones_añadidos==False:
-            screen.blit(corazon1, (160, 250))
-            screen.blit(corazon2, (190, 250))
-            screen.blit(corazon3, (210, 250))
-            corazones_añadidos=True
-            pygame.display.flip()
-        '''
         
+
         if tiempoSinChoque == 1000:#subir de dificultad periodicamente
             avisoTiempoSinChoque=True
             crear_meteoritos(avisoTiempoSinChoque)
@@ -249,6 +288,7 @@ while not fin_juego:
             y_speed=movimiento_teclado(evento,x_speed,y_speed)[1]
             
         screen.blit(background, [0, 0])#añadir imagen
+  
         TodosSprite.update(Choque) 
         coord_x += x_speed
         coord_y += y_speed
@@ -256,7 +296,7 @@ while not fin_juego:
         nave.rect.y = coord_y
         numcolisiones=pygame.sprite.spritecollide(nave, ListaMeteoritos, True)
         for colisiones in numcolisiones:
-
+            VIDA -=1 
             Choque =True
             avisoTiempoSinChoque=False
             TodosSprite.update(Choque)
@@ -264,8 +304,8 @@ while not fin_juego:
             coord_x = 500
             coord_y = 500
             time.sleep(0.10)#Nose si añadirlo
-            VIDA -=1 
-            print("LE QUEDAN " + str(VIDA)+" VIDAS")    
+            
+            #print("LE QUEDAN " + str(VIDA)+" VIDAS")    
             if VIDA == 0:
                 #puntuacion= tiempoIni-tiempoFin
                 #print(tiempoFin)
