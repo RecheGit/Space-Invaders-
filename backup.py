@@ -1,4 +1,4 @@
-import pygame, random, sys, time, button
+import pygame, random, sys, time, tt2, button
 from pygame.locals import *
 from datetime import datetime
 
@@ -38,6 +38,8 @@ class Nave(pygame.sprite.Sprite):
 		self.image = pygame.image.load("imagenes/playerN.png").convert()
 		self.image.set_colorkey(BLACK)
 		self.rect = self.image.get_rect()
+
+
  
 pygame.init()
 
@@ -56,7 +58,7 @@ play_img = pygame.transform.scale(play_img, (width-500, height-100))
 #screen.blit(play_img,(300,500) )
 
 fin_juego=False
-VIDA=3
+VIDA=1
 
 
 #Coordenadas de la nave al inicio
@@ -101,7 +103,7 @@ estado_menu = "menuInicial"
 
 
 fuente=pygame.font.SysFont("arialblack",100)
-fuente2=pygame.font.SysFont("arialblack",40)
+fuente2=pygame.font.SysFont("arialblack",50)
 
 
 
@@ -159,19 +161,26 @@ exit_button = button.Button(475, 526, exit_img, 0.05)
 tick_button = button.Button(600, 526, tick_img, 0.05)
 
 
+
+
 game_mode= "menuInicio"
 click=False
+nombre=""
+puntuacion=0
 while not fin_juego:
     if game_mode== "controles":
         screen.blit(background_menuInicio, [0, 0])
-        screen.blit(fuente.render("CONTROLES ", True,WHITE ), (150, 50))
-        screen.blit(fuente2.render("Desplazamiento Derecha: d", True,WHITE ), (5, 200))
-        screen.blit(fuente2.render("Desplazamiento Izquierda: a ", True,WHITE ), (5, 300))
-        screen.blit(fuente2.render("Desplazamiento Frontal: w ", True,WHITE ), (5, 400))
-        screen.blit(fuente2.render("Desplazamiento Trasero: s ", True,WHITE ), (5, 500))
+        screen.blit(fuente.render("CONTROLES ", True,WHITE ), (300, 50))
+        screen.blit(fuente2.render("Desplazamiento Derecha: d", True,WHITE ), (5, 130))
+        screen.blit(fuente2.render("Desplazamiento Izquierda: a ", True,WHITE ), (5, 200))
+        screen.blit(fuente2.render("Desplazamiento Frontal: w ", True,WHITE ), (5, 270))
+        screen.blit(fuente2.render("Desplazamiento Trasero: s ", True,WHITE ), (5, 330))
+        screen.blit(fuente2.render("Menu de Pausa: p ", True,WHITE ), (5, 400))
+
 
         if return_button.draw(screen):
             game_mode="menuInicio"
+
         for evento in pygame.event.get():
             if evento.type== pygame.QUIT:
                 sys.exit()
@@ -180,6 +189,7 @@ while not fin_juego:
     
 
     if game_mode == "menuInicio":
+        #tt2.main()
         screen.blit(background_menuInicio, [0, 0])
         screen.blit(fuente.render("CHOQUE ESPACIAL", True,WHITE ), (150, 50))
         if start_button.draw(screen):
@@ -208,7 +218,16 @@ while not fin_juego:
                         pygame.display.flip()
                         
     elif game_mode == "jugando":
-       
+        #nombre=tt2.InputBox.handle_event()
+        #print(nombre)
+        '''
+        if corazones_añadidos==False:
+            screen.blit(corazon1, (160, 250))
+            screen.blit(corazon2, (190, 250))
+            screen.blit(corazon3, (210, 250))
+            corazones_añadidos=True
+            pygame.display.flip()
+        '''
         
         if tiempoSinChoque == 1000:#subir de dificultad periodicamente
             avisoTiempoSinChoque=True
@@ -222,6 +241,7 @@ while not fin_juego:
             elif evento.type == pygame.KEYDOWN:
 
                 if evento.key == pygame.K_p:
+                    
                     game_mode = "partida_pausada"
 
             x_speed=movimiento_teclado(evento,x_speed,y_speed)[0]
@@ -246,7 +266,8 @@ while not fin_juego:
             VIDA -=1 
             print("LE QUEDAN " + str(VIDA)+" VIDAS")    
             if VIDA == 0:
-                print("GAME OVER")
+                #puntuacion= tiempoIni-tiempoFin
+                #print(tiempoFin)
                 game_mode="menu_fin"
                 #fin_juego=True
         Choque=False
@@ -270,20 +291,23 @@ while not fin_juego:
         clock.tick(170) #Frames por segundo  
     elif game_mode == "menu_fin":
         screen.blit(background_menuInicio, [0, 0])
-        screen.blit(fuente.render("GAME OVER", True,WHITE ), (150, 50))
+        screen.blit(fuente.render("GAME OVER", True,WHITE ), (275, 50))
+        screen.blit(fuente.render("¿JUGAR OTRA VEZ?", True,WHITE ), (275, 400))
         #MOSTAR RANKING?
         if exit_button.draw(screen):
             sys.exit()
         if tick_button.draw(screen):
-            VIDA=3
+            VIDA=1
             coord_x = 500
             coord_y = 500
+            x_speed=0
+            y_speed=0
             game_mode="jugando"
         for evento in pygame.event.get():
             if evento.type== pygame.QUIT:
                 sys.exit()
 
-        pygame.display.update()
+       # pygame.display.update()
 
 
     pygame.display.update()
