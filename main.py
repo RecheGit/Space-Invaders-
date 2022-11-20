@@ -384,7 +384,7 @@ def main():
             i=0
             a=300
             while i<len(ranking) :
-                screen.blit(fuente2.render(ranking[i][1] + " ha conseguido: " + str(puntos) +" puntos." , True,WHITE ), (100, a))
+                screen.blit(fuente2.render(ranking[i][1] + " ha conseguido: " + str(ranking[i][0]) +" puntos." , True,WHITE ), (100, a))
                 i+=1   
                 a+=40  
             screen.blit(fuente.render("Puntuación: "+ str(puntos), True,WHITE ), (275, 200))
